@@ -1,0 +1,7 @@
+import app from "./app.js";
+import { config } from './utils/env.js'
+
+app.listen(config.PORT, () => {
+    console.log(`Server running at → ${config.HOST}:${config.PORT}`);
+    console.log(`Coba buka semua route di atas pakai Postman!`);
+});

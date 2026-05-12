@@ -1,0 +1,130 @@
+import { format } from '@/lib/date'
+import { id } from 'date-fns/locale'
+import { Filter } from 'lucide-react'
+import type { DateRange } from 'react-day-picker'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import type { Period } from '@/features/purchases/overview/types/purchases-overview'
+
+interface DashboardGlobalFilterProps {
+  period: Period
+  dateRange: DateRange | undefined
+  setPeriod: (period: Period) => void
+  setDateRange: (dateRange: DateRange | undefined) => void
+}
+
+export function DashboardGlobalFilter({
+  period,
+  dateRange,
+  setPeriod,
+  setDateRange,
+}: DashboardGlobalFilterProps) {
+  const getPeriodLabel = () => {
+    switch (period) {
+      case 'day':
+        return 'Harian'
+      case 'month':
+        return 'Bulanan'
+      case 'year':
+        return 'Tahunan'
+      case 'custom':
+        return 'Custom'
+      default:
+        return 'Filter'
+    }
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant='outline' className='gap-2 shadow-sm'>
+          <Filter className='h-4 w-4' />
+          {getPeriodLabel()}
+          {period === 'custom' && dateRange?.from && (
+            <span className='text-muted-foreground ml-1'>
+              ({dateRange.from ? format(dateRange.from, 'dd/MM/yyyy') : ''}
+              {dateRange.to ? ` - ${format(dateRange.to, 'dd/MM/yyyy')}` : ''})
+            </span>
+          )}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align='end' className='w-48'>
+        <DropdownMenuItem
+          onClick={() => {
+            setPeriod('day')
+            setDateRange(undefined)
+          }}
+          className={cn(period === 'day' && 'bg-accent')}
+        >
+          Harian
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            setPeriod('month')
+            setDateRange(undefined)
+          }}
+          className={cn(period === 'month' && 'bg-accent')}
+        >
+          Bulanan
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            setPeriod('year')
+            setDateRange(undefined)
+          }}
+          className={cn(period === 'year' && 'bg-accent')}
+        >
+          Tahunan
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger
+            className={cn(period === 'custom' && 'bg-accent')}
+          >
+            Custom
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent className='p-0' sideOffset={8}>
+            <div className='border-b p-3'>
+              <div className='flex items-center justify-between gap-2'>
+                <div className='border-input rounded-md border px-3 py-1 text-xs'>
+                  {dateRange?.from
+                    ? format(dateRange.from, 'dd/MM/yyyy')
+                    : 'Pilih tanggal'}
+                </div>
+                <span className='text-muted-foreground text-xs'>s/d</span>
+                <div className='border-input rounded-md border px-3 py-1 text-xs'>
+                  {dateRange?.to
+                    ? format(dateRange.to, 'dd/MM/yyyy')
+                    : 'Pilih tanggal'}
+                </div>
+              </div>
+            </div>
+            <Calendar
+              mode='range'
+              selected={dateRange}
+              onSelect={(range) => {
+                setDateRange(range)
+                if (range?.from && range?.to) {
+                  setPeriod('custom')
+                }
+              }}
+              locale={id}
+              autoFocus
+            />
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
