@@ -1,0 +1,13 @@
+model Model {
+  id         Int      @id @default(autoincrement())
+  groupId    Int      @map("group_id")
+  categoryId Int      @map("category_id")
+  name       String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  group      Group    @relation(fields: [groupId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+  variants   Variant[] // Relasi ke tabel variants
+
+  @@map("models")
+}
