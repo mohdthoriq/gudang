@@ -25,7 +25,7 @@ export class GroupService {
     };
   }
 
-  static async getGroupById(id: number): Promise<Group> {
+  static async getGroupById(id: string): Promise<Group> {
     const group = await GroupRepository.findById(id);
     if (!group) throw new Error('Grup tidak ditemukan');
     return group;
@@ -36,13 +36,13 @@ export class GroupService {
     return GroupRepository.create(parsedData);
   }
 
-  static async updateGroup(id: number, payload: unknown): Promise<Group> {
+  static async updateGroup(id: string, payload: unknown): Promise<Group> {
     const parsedData = updateGroupSchema.parse(payload);
     await this.getGroupById(id); // Validasi eksistensi sebelum update
     return GroupRepository.update(id, parsedData);
   }
 
-  static async deleteGroup(id: number): Promise<Group> {
+  static async deleteGroup(id: string): Promise<Group> {
     await this.getGroupById(id); // Validasi eksistensi sebelum delete
     return GroupRepository.delete(id);
   }

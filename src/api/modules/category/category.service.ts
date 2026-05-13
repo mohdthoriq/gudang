@@ -32,7 +32,7 @@ export class CategoryService {
     };
   }
 
-  static async getCategoryById(id: number): Promise<Category> {
+  static async getCategoryById(id: string): Promise<Category> {
     const category = await CategoryRepository.findById(id);
     if (!category) throw new Error('Kategori tidak ditemukan');
     return category;
@@ -43,13 +43,13 @@ export class CategoryService {
     return CategoryRepository.create(parsedData);
   }
 
-  static async updateCategory(id: number, payload: unknown): Promise<Category> {
+  static async updateCategory(id: string, payload: unknown): Promise<Category> {
     const parsedData = updateCategorySchema.parse(payload);
     await this.getCategoryById(id);
     return CategoryRepository.update(id, parsedData);
   }
 
-  static async deleteCategory(id: number): Promise<Category> {
+  static async deleteCategory(id: string): Promise<Category> {
     await this.getCategoryById(id);
     return CategoryRepository.delete(id);
   }

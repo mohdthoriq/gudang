@@ -1,18 +1,18 @@
 import { NextRequest } from 'next/server';
-import { GroupService } from '../../../../api/modules/group/group.service';
+import { VariantService } from '@/api/modules/variant/variant.service';
 import { apiHandler } from '@/lib/api-wrapper';
 import { successResponse } from '@/utils/response';
 
 type RouteParams = { params: Promise<{ id: string }> };
 
-export const GET_BY_ID = apiHandler(async (request: NextRequest, { params }: RouteParams) => {
+export const GET = apiHandler(async (request: NextRequest, { params }: RouteParams) => {
   const resolvedParams = await params;
   const id = resolvedParams.id;
   if (!id) throw new Error('ID tidak valid');
 
-  const group = await GroupService.getGroupById(id);
+  const variant = await VariantService.getVariantById(id);
   
-  return successResponse('Berhasil mengambil detail grup', group, 200);
+  return successResponse('Berhasil mengambil detail varian', variant, 200);
 });
 
 export const PUT = apiHandler(async (request: NextRequest, { params }: RouteParams) => {
@@ -21,17 +21,17 @@ export const PUT = apiHandler(async (request: NextRequest, { params }: RoutePara
   if (!id) throw new Error('ID tidak valid');
 
   const body = await request.json();
-  const updatedGroup = await GroupService.updateGroup(id, body);
+  const updatedVariant = await VariantService.updateVariant(id, body);
   
-  return successResponse('Grup berhasil diperbarui', updatedGroup, 200);
+  return successResponse('Varian berhasil diperbarui', updatedVariant, 200);
 });
 
-export const DELETE_BY_ID = apiHandler(async (request: NextRequest, { params }: RouteParams) => {
+export const DELETE = apiHandler(async (request: NextRequest, { params }: RouteParams) => {
   const resolvedParams = await params;
   const id = resolvedParams.id;
   if (!id) throw new Error('ID tidak valid');
 
-  await GroupService.deleteGroup(id);
+  await VariantService.deleteVariant(id);
   
-  return successResponse('Grup berhasil dihapus', null, 200);
+  return successResponse('Varian berhasil dihapus', null, 200);
 });

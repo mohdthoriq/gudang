@@ -24,7 +24,7 @@ export class GroupRepository {
     ]);
   }
 
-  static async findById(id: number): Promise<Group | null> {
+  static async findById(id: string): Promise<Group | null> {
     return prisma.group.findUnique({
       where: { id },
     });
@@ -34,20 +34,20 @@ export class GroupRepository {
     return prisma.group.create({ data });
   }
 
-  static async update(id: number, data: UpdateGroupDTO): Promise<Group> {
+  static async update(id: string, data: UpdateGroupDTO): Promise<Group> {
     return prisma.group.update({
       where: { id },
       data,
     });
   }
 
-  static async delete(id: number): Promise<Group> {
+  static async delete(id: string): Promise<Group> {
     return prisma.group.delete({
       where: { id },
     });
   }
 
-  static async deleteMany(ids: number[]): Promise<Prisma.BatchPayload> {
+  static async deleteMany(ids: string[]): Promise<Prisma.BatchPayload> {
     return prisma.group.deleteMany({
       where: { id: { in: ids } },
     });

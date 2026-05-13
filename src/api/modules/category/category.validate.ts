@@ -7,7 +7,7 @@ export const createCategorySchema = z.object({
 export const updateCategorySchema = createCategorySchema.partial();
 
 export const bulkDeleteCategorySchema = z.object({
-  ids: z.array(z.number().int().positive()).min(1, "Minimal pilih 1 ID untuk dihapus"),
+  ids: z.array(z.string().uuid()).min(1, "Minimal pilih 1 ID untuk dihapus"),
 });
 
 export const queryCategorySchema = z.object({

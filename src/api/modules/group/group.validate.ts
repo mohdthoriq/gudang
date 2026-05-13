@@ -9,7 +9,7 @@ export const updateGroupSchema = z.object({
 })
 
 export const bulkDeleteGroupSchema = z.object({
-    ids: z.array(z.number()).min(1, 'Minimal 1 group')
+    ids: z.array(z.string()).min(1, 'Minimal 1 group')
 })
 
 export const queryGroupSchema = z.object({

@@ -1,6 +1,9 @@
+-- CreateEnum
+CREATE TYPE "TransactionType" AS ENUM ('IN', 'OUT');
+
 -- CreateTable
 CREATE TABLE "groups" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
 
     CONSTRAINT "groups_pkey" PRIMARY KEY ("id")
@@ -8,7 +11,7 @@ CREATE TABLE "groups" (
 
 -- CreateTable
 CREATE TABLE "categories" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
 
     CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
@@ -16,9 +19,9 @@ CREATE TABLE "categories" (
 
 -- CreateTable
 CREATE TABLE "models" (
-    "id" SERIAL NOT NULL,
-    "group_id" INTEGER NOT NULL,
-    "category_id" INTEGER NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "group_id" UUID NOT NULL,
+    "category_id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -27,8 +30,8 @@ CREATE TABLE "models" (
 
 -- CreateTable
 CREATE TABLE "stock_histories" (
-    "id" SERIAL NOT NULL,
-    "variant_id" INTEGER NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "variant_id" UUID NOT NULL,
     "type" "TransactionType" NOT NULL,
     "quantity" INTEGER NOT NULL,
     "description" TEXT,
@@ -39,8 +42,8 @@ CREATE TABLE "stock_histories" (
 
 -- CreateTable
 CREATE TABLE "variants" (
-    "id" SERIAL NOT NULL,
-    "model_id" INTEGER NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "model_id" UUID NOT NULL,
     "color" TEXT NOT NULL,
     "size" TEXT NOT NULL,
     "stock" INTEGER NOT NULL DEFAULT 0,

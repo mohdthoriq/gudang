@@ -7,7 +7,7 @@ export class ModelRepository {
     skip: number,
     take: number,
     search?: string,
-    groupId?: number
+    groupId?: string
   ): Promise<[Model[], number]> {
     // Susun filter dinamis
     const where: Prisma.ModelWhereInput = {
@@ -27,7 +27,7 @@ export class ModelRepository {
     ]);
   }
 
-  static async findById(id: number): Promise<Model | null> {
+  static async findById(id: string): Promise<Model | null> {
     return prisma.model.findUnique({
       where: { id },
       include: { group: true },
@@ -38,20 +38,20 @@ export class ModelRepository {
     return prisma.model.create({ data: {...data, categoryId: data.groupId} });
   }
 
-  static async update(id: number, data: UpdateModelInput): Promise<Model> {
+  static async update(id: string, data: UpdateModelInput): Promise<Model> {
     return prisma.model.update({
       where: { id },
       data: {...data, categoryId: data.groupId},
     });
   }
 
-  static async delete(id: number): Promise<Model> {
+  static async delete(id: string): Promise<Model> {
     return prisma.model.delete({
       where: { id },
     });
   }
 
-  static async deleteMany(ids: number[]): Promise<Prisma.BatchPayload> {
+  static async deleteMany(ids: string[]): Promise<Prisma.BatchPayload> {
     return prisma.model.deleteMany({
       where: { id: { in: ids } },
     });

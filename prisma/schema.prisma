@@ -18,7 +18,7 @@ enum TransactionType {
 }
 
 model Group {
-  id     Int     @id @default(autoincrement())
+  id     String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name   String
   
   models Model[] // Relasi ke tabel models
@@ -27,7 +27,7 @@ model Group {
 }
 
 model Category {
-  id     Int     @id @default(autoincrement())
+  id     String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name   String
   
   models Model[] // Relasi ke tabel models
@@ -36,9 +36,9 @@ model Category {
 }
 
 model Model {
-  id         Int      @id @default(autoincrement())
-  groupId    Int      @map("group_id")
-  categoryId Int      @map("category_id")
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  groupId    String      @map("group_id") @db.Uuid
+  categoryId String      @map("category_id") @db.Uuid
   name       String
   createdAt  DateTime @default(now()) @map("created_at")
 
@@ -50,8 +50,8 @@ model Model {
 }
 
 model StockHistory {
-  id          Int             @id @default(autoincrement())
-  variantId   Int             @map("variant_id")
+  id          String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  variantId   String             @map("variant_id") @db.Uuid
   type        TransactionType
   quantity    Int
   description String?         @db.Text
@@ -63,8 +63,8 @@ model StockHistory {
 }
 
 model Variant {
-  id         Int      @id @default(autoincrement())
-  modelId    Int      @map("model_id")
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  modelId    String      @map("model_id") @db.Uuid
   color      String
   size       String
   stock      Int      @default(0)

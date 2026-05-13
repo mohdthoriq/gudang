@@ -18,7 +18,7 @@ export class ModelService {
     
     // Tarik nilai opsional
     const search = parsed.search;
-    const groupId = parsed.groupId ? Number(parsed.groupId) : undefined;
+    const groupId = parsed.groupId ? String(parsed.groupId) : undefined;
 
     const [models, totalItems] = await ModelRepository.findAndCountAll(
       skip, 
@@ -38,7 +38,7 @@ export class ModelService {
     };
   }
 
-  static async getModelById(id: number): Promise<Model> {
+  static async getModelById(id: string): Promise<Model> {
     const model = await ModelRepository.findById(id);
     if (!model) throw new Error('Model tidak ditemukan');
     return model;
@@ -54,7 +54,7 @@ export class ModelService {
     return ModelRepository.create(parsedData);
   }
 
-  static async updateModel(id: number, payload: unknown): Promise<Model> {
+  static async updateModel(id: string, payload: unknown): Promise<Model> {
     const parsedData = updateModelSchema.parse(payload);
     await this.getModelById(id); // Pastikan model ada sebelum di-update
     
@@ -67,7 +67,7 @@ export class ModelService {
     return ModelRepository.update(id, parsedData);
   }
 
-  static async deleteModel(id: number): Promise<Model> {
+  static async deleteModel(id: string): Promise<Model> {
     await this.getModelById(id);
     return ModelRepository.delete(id);
   }

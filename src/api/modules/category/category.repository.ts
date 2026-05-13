@@ -24,7 +24,7 @@ export class CategoryRepository {
     ]);
   }
 
-  static async findById(id: number): Promise<Category | null> {
+  static async findById(id: string): Promise<Category | null> {
     return prisma.category.findUnique({
       where: { id },
       include: { models: true },
@@ -35,20 +35,20 @@ export class CategoryRepository {
     return prisma.category.create({ data });
   }
 
-  static async update(id: number, data: UpdateCategoryInput): Promise<Category> {
+  static async update(id: string, data: UpdateCategoryInput): Promise<Category> {
     return prisma.category.update({
       where: { id },
       data,
     });
   }
 
-  static async delete(id: number): Promise<Category> {
+  static async delete(id: string): Promise<Category> {
     return prisma.category.delete({
       where: { id },
     });
   }
 
-  static async deleteMany(ids: number[]): Promise<Prisma.BatchPayload> {
+  static async deleteMany(ids: string[]): Promise<Prisma.BatchPayload> {
     return prisma.category.deleteMany({
       where: { id: { in: ids } },
     });
