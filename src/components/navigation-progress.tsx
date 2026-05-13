@@ -1,0 +1,25 @@
+"use client"
+
+import { useEffect, useRef } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
+import LoadingBar, { type LoadingBarRef } from 'react-top-loading-bar'
+
+export function NavigationProgress() {
+  const ref = useRef<LoadingBarRef>(null)
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  // Selesaikan loading bar setiap kali pathname atau searchParams berubah
+  useEffect(() => {
+    ref.current?.complete()
+  }, [pathname, searchParams])
+
+  return (
+    <LoadingBar
+      color='hsl(var(--primary))' // Sesuaikan dengan variabel CSS Tailwind Anda
+      ref={ref}
+      shadow={true}
+      height={2}
+    />
+  )
+}
