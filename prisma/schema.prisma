@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TransactionType {
+  IN
+  OUT
+}
+
+model Group {
+  id     String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name   String
+  
+  models Model[] // Relasi ke tabel models
+
+  @@map("groups")
+}
+
+model Category {
+  id     String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name   String
+  
+  models Model[] // Relasi ke tabel models
+
+  @@map("categories")
+}
+
+model Model {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  groupId    String      @map("group_id") @db.Uuid
+  categoryId String      @map("category_id") @db.Uuid
+  name       String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  group      Group    @relation(fields: [groupId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+  variants   Variant[] // Relasi ke tabel variants
+
+  @@map("models")
+}
+
+model StockHistory {
+  id          String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  variantId   String             @map("variant_id") @db.Uuid
+  type        TransactionType
+  quantity    Int
+  description String?         @db.Text
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  variant     Variant         @relation(fields: [variantId], references: [id])
+
+  @@map("stock_histories")
+}
+
+model Variant {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  modelId    String      @map("model_id") @db.Uuid
+  color      String
+  size       String
+  stock      Int      @default(0)
+  sku        String?  @unique
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  model      Model          @relation(fields: [modelId], references: [id])
+  histories  StockHistory[] // Relasi ke riwayat stok
+
+  @@map("variants")
+}
